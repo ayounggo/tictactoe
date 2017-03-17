@@ -1,1 +1,252 @@
-ttt
+<!DOCTYPE html>
+<!-- HTML5 Hello world by kirupa - http://www.kirupa.com/html5/getting_your_feet_wet_html5_pg1.htm -->
+<html lang="en-us">
+
+<head>
+	<meta charset="utf-8">
+	<title>Tic Tac Toe...</title>
+	<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Lemon" />
+	<style type="text/css">
+		table {
+			border: solid 1px;
+			width: 300px;
+			height: 300px;
+			margin: 0px 300px 100px 400px;
+		}
+		
+		td {
+			background-color: yellow;
+		}
+		
+		td.p1 {
+			background-color: green;
+		}
+		
+		td.p2 {
+			background-color: blue;
+		}
+		
+		div.titleBar {
+			margin-left: 400px;
+			width: 300px;
+			padding-bottom: 15px;
+		}
+		
+		a {
+			font-family: lemon;
+			font-weight: bold;
+			font-size: 32px;
+			text-decoration: none;
+		}
+		
+		body {
+			background-image: url('quack.png');
+			background-repeat: no-repeat;
+			background-position: left;
+			padding: 20px 20px 20px 20px;
+		}
+		
+		div.bingo {
+			background-color: rgb(255, 147, 125);
+			padding: 50px;
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			height: 700px;
+			font-family: lemon;
+		}
+		
+		div.bingo img {
+			width: 900px;
+			padding-left: 90px;
+		}
+		
+		h2 {
+			color: rgb(248, 22, 34);
+			font-size: 36px;
+		}
+		
+		.countdown {
+			width: 50px;
+			height: 30px;
+		}
+	</style>
+
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+</head>
+
+<body>
+	<div class='titleBar'>
+		<a href="#" onclick="toggleTables()">Tic Tac Toe</a>
+	</div>
+
+	<table class='three'>
+		<tr>
+			<td class="r1 c1 dd"></td>
+			<td class="r1 c2 "></td>
+			<td class="r1 c3 ee"></td>
+		</tr>
+		<tr>
+			<td class="r2 c1 "></td>
+			<td class="r2 c2 dd ee"></td>
+			<td class="r2 c3 "></td>
+		</tr>
+		<tr>
+			<td class="r3 c1 ee"></td>
+			<td class="r3 c2 "></td>
+			<td class="r4 c3 dd"></td>
+		</tr>
+	</table>
+	<table class='five'>
+		<tr>
+			<td>
+			</td>
+			<td>
+			</td>
+			<td>
+			</td>
+			<td>
+			</td>
+			<td>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			</td>
+			<td>
+			</td>
+			<td>
+			</td>
+			<td>
+			</td>
+			<td>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			</td>
+			<td>
+			</td>
+			<td>
+			</td>
+			<td>
+			</td>
+			<td>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			</td>
+			<td>
+			</td>
+			<td>
+			</td>
+			<td>
+			</td>
+			<td>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			</td>
+			<td>
+			</td>
+			<td>
+			</td>
+			<td>
+			</td>
+			<td>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			</td>
+			<td>
+			</td>
+			<td>
+			</td>
+			<td>
+			</td>
+			<td>
+			</td>
+		</tr>
+	</table>
+	<div class='bingo'>
+		<h2> Please refresh the page to start a new game. Enjoy!</h2>
+		<image src="https://media.giphy.com/media/11sBLVxNs7v6WA/giphy.gif" />
+	</div>
+
+	<script>
+		var Def = {};
+		Def = {
+			currentPlayer: 'p1',
+			waitingPlayer: 'p2',
+			currentTable: 'three',
+			hiddenTable: 'five'
+		};
+
+		$('table').hide();
+		$('.' + Def.currentTable).show();
+		$('.bingo').hide();
+
+		// click event for each td
+		$('td').on('click', cellClickHandlers);
+
+		function cellClickHandlers() {
+			var cell = $(this);
+			cell.addClass(Def.currentPlayer);
+			cell.removeClass(Def.waitingPlayer);
+			switchTwo('currentPlayer', 'waitingPlayer');
+			checkWinner(cell);
+		}
+
+		function toggleTables() {
+			//debugger
+			$('.' + Def.currentTable).hide();
+			$('.' + Def.hiddenTable).show();
+			switchTwo('currentTable', 'hiddenTable');
+		}
+
+
+		//utility functions
+		function switchTwo(a, b) {
+			var tmp = Def[a];
+			Def[a] = Def[b];
+			Def[b] = tmp;
+		}
+
+		function checkWinner(cell) {
+			//cell.className();
+
+			var classNames = $(cell).attr('class').split(' ');
+			var cur = classNames.pop();
+			$.each(classNames, function(i, value) {
+				var count = $('.' + value + '.' + cur).length;
+				if (count === 3) {
+					winMessage();
+					window.setTimeout(bingo, 4000);
+				}
+
+			});
+
+		}
+
+		function winMessage() {
+			$('td').off('click', cellClickHandlers);
+			$('.titleBar>a').html('You Win !!<image class="countdown" src="https://media.giphy.com/media/qTBA8TwRnFsY0/giphy.gif"/>');
+		}
+
+		function bingo() {
+			$('table').hide();
+			$('.bingo').show();
+			window.setTimeout(function() {
+				location.reload()
+			}, 8000);
+		}
+	</script>
+
+</body>
+
+</html>
+
